@@ -104,7 +104,7 @@ ENV/
 .idea
 
 # local data
-data
+/data
 
 # output files
-output
+/output
