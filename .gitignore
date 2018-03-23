@@ -103,3 +103,8 @@ ENV/
 # JetBrains IDE files
 .idea
 
+# local data
+data
+
+# output files
+output
