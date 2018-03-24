@@ -13,10 +13,10 @@ BASE = "https://storage.googleapis.com/uga-dsp/project4/"
 
 # read the manifest files whenever this module is imported
 with open("manifests/train.txt", 'r') as train_manifest:
-    TRAINING_MANIFEST = map(lambda s: s.strip(), train_manifest.readlines())
+    TRAINING_MANIFEST = list(map(lambda s: s.strip(), train_manifest.readlines()))
 
 with open("manifests/test.txt", 'r') as test_manifest:
-    TESTING_MANIFEST = map(lambda s: s.strip(), test_manifest.readlines())
+    TESTING_MANIFEST = list(map(lambda s: s.strip(), test_manifest.readlines()))
 
 
 def _download(movie=None, save_location="data"):
@@ -66,4 +66,6 @@ def _download(movie=None, save_location="data"):
         mask_data = response.read()
         with open(mask_filepath, 'wb') as mask_file:
             mask_file.write(mask_data)
+
+    return save_path
 
