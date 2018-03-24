@@ -13,8 +13,6 @@ class Mean(Transform):
     """
     def __call__(self, series):
         images = series.toimages()
-        print(images.mean().shape)
-        print(images.mean().values[0].shape)
         return images.mean().values[0]
 
 
