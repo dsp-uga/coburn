@@ -11,7 +11,7 @@ class Transform(ABC):
         """
         This method should be overridden in child classes.  It should take a thunder.Series object and, for maximum
         composability, return a thunder.Series object
-        :param series: thunder.Series
+        :param data: thunder.Series
         :return: object resulting from applying the transform to the series
         """
         pass
