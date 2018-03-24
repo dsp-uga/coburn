@@ -71,3 +71,61 @@ def _download(movie=None, save_location="data"):
 
     return save_path
 
+
+def load(samples='all', base_dir='data', skip_cached=True):
+    """
+    Loads the specified examples into a coburn.data.Dataset object
+    The `hashes` argument can any of the following:
+        - the keyword 'all', which loads every sample in both the training and testing sets
+        - the keyword 'train', which loads every sample in the training set
+        - the keyword 'test', which loads every sample in the test set
+        - an array of hashes, which loads each sample whose hash is in the array
+
+    :param samples: array of str or one of ['all', 'train', 'test']
+    :param base_dir: the local directory where the datasets will be stored
+    :param skip_cached: if set, samples found in `base_dir` will not be downloaded again
+    :return: coburn.data.Dataset object representing the set of samples
+    """
+    if isinstance(samples, str):
+        if samples == 'all':
+            samples = TRAINING_MANIFEST + TESTING_MANIFEST
+        elif samples == 'train':
+            samples = TRAINING_MANIFEST
+        elif samples == 'test':
+            samples = TESTING_MANIFEST
+
+    # ensure all the datasets from `samples` are downloaded
+    if not os.path.exists(base_dir):
+        os.makedirs(base_dir)
+    cache = [sample for sample in os.listdir(base_dir)]
+    for movie_hash in samples:
+        if not skip_cached or not movie_hash in cache:
+            _download(movie_hash, base_dir)
+
+    # create a dataset for these samples
+    dataset = Dataset(samples, base_dir)
+    return dataset
+
+
+def random_sample(n=1, type='train', base_dir='data', seed=None):
+    """
+    Randomly samples n movies from the train or test set.
+    Somewhat useful for testing models on a small scale.
+
+    :param n: the number of movies to sample
+    :param type: 'train' to sample from the training set, 'test' to sample from the testing set, 'all' to sample from
+                    the combined training and testing sets
+    :param seed: float, seed for the RNG that selects the samples
+    :return: coburn.data.Dataset object representing the set of samples
+    """
+    set = TRAINING_MANIFEST
+    if type == 'test':
+        set = TESTING_MANIFEST
+    elif type == 'all':
+        set += TESTING_MANIFEST
+
+    if seed is not None:
+        np.random.seed(seed)
+
+    samples = np.random.choice(set, n)
+    return load(samples, base_dir=base_dir)
