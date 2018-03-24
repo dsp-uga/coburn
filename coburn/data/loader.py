@@ -1,12 +1,13 @@
 """
-    The loader module is responsible for downloading datasets and loading/streaming them into memory
+The loader module is responsible for downloading datasets and loading/streaming them into memory
 """
 
 import os
 import io
 import tarfile
-
+import numpy as np
 import urllib.request
+from .Dataset import Dataset
 
 
 BASE = "https://storage.googleapis.com/uga-dsp/project4/"
@@ -44,14 +45,15 @@ def _download(movie=None, save_location="data"):
 
     # extract the images to the save directory
     save_path = os.path.join(save_location, movie)
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
+    images_subdir = os.path.join(save_path, 'images')
+    if not os.path.exists(images_subdir):
+        os.makedirs(images_subdir)
 
     for image in tarred_movie.getmembers():
         image_name = os.path.basename(image.name)
         image_file = tarred_movie.extractfile(image)
         image_bytes = image_file.read()
-        image_path = os.path.join(save_path, image_name)
+        image_path = os.path.join(images_subdir, image_name)
         with open(image_path, 'wb') as outfile:
             outfile.write(image_bytes)
 
