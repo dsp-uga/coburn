@@ -32,6 +32,9 @@ def main():
                      help='the directory where the movie will be saved [DEFAULT: ./data]')
     cmd.set_defaults(func=download_movies)
 
+    cmd = subcommands.add_parser('example', description='Load a small dataset and display the mean images', argument_default=argparse.SUPPRESS)
+    cmd.set_defaults(func=coburn.experiments.example_transform.main)
+
     # Each subcommand gives an `args.func`.
     # Call that function and pass the rest of `args` as kwargs.
     args = parser.parse_args()
