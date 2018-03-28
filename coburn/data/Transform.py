@@ -7,11 +7,11 @@ from abc import ABC, abstractmethod
 
 class Transform(ABC):
     @abstractmethod
-    def __call__(self, data):
+    def __call__(self, images):
         """
-        This method should be overridden in child classes.  It should take a thunder.Series object and, for maximum
-        composability, return a thunder.Series object
-        :param data: thunder.Series
-        :return: object resulting from applying the transform to the series
+        This method should be overridden in child classes.  It should take a thunder.Images object and, for maximum
+        composability, return a thunder.Images object
+        :param data: thunder.Images
+        :return: object resulting from applying the transform to the images
         """
         pass

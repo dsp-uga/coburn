@@ -49,8 +49,8 @@ class Dataset(torch.utils.data.Dataset):
         """
         assert(0 <= idx < self.__len__())
         hash = self.hashes[idx]
-        path_to_series = os.path.join(self.base_dir, hash, 'images')
-        data = td.images.frompng(path_to_series).toseries()
+        path_to_images = os.path.join(self.base_dir, hash, 'images')
+        data = td.images.frompng(path_to_images)
 
         if self.transform is not None:
             data = self.transform.__call__(data)
