@@ -1,4 +1,5 @@
 import torch.utils.data
+from torchvision.transforms import Compose
 import thunder as td
 import skimage.data
 import os
@@ -25,7 +26,7 @@ class Dataset(torch.utils.data.Dataset):
         self.hashes = hashes
         self.base_dir = base_dir
         if transform is not None:
-            assert(isinstance(transform, Transform))
+            assert(isinstance(transform, Transform) or isinstance(transform, Compose))
         self.transform = transform
 
     def __len__(self):
@@ -80,6 +81,6 @@ class Dataset(torch.utils.data.Dataset):
         :param transform: coburn.data.Transform object
         :return: None
         """
-        assert(isinstance(transform, Transform))
+        assert(isinstance(transform, Transform) or isinstance(transform, Compose))
         self.transform = transform
 
