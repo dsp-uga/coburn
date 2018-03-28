@@ -3,7 +3,8 @@ This experiment shows an example of how the loader and preprocess modules can be
 do some simple preprocessing
 """
 from coburn.data import preprocess, loader
-from skimage.viewer import CollectionViewer
+from showit import tile
+from matplotlib import pyplot as plt
 
 
 def main():
@@ -17,11 +18,11 @@ def main():
     transform = preprocess.Mean()
     dataset.set_transform(transform)
 
-    mean_images = []
+    mean_images = list()
     for i in range(len(dataset)):
         sample = dataset[i]  # mean transform has already been applied!
         mean_images.append(sample)
 
-    viewer = CollectionViewer(mean_images)
-    viewer.show()
+    tile(mean_images)
+    plt.show()
 
