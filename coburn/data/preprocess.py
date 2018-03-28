@@ -11,15 +11,13 @@ class Mean(Transform):
     """
     Computes the mean of a series of images along the time axis
     """
-    def __call__(self, series):
-        images = series.toimages()
-        return images.mean().values[0]
+    def __call__(self, images):
+        return images.mean()
 
 
 class Variance(Transform):
     """
     Computes the variance of a series of images along the time axis
     """
-    def __call__(self, series):
-        images = series.toimages()
-        return images.var().values[0]
+    def __call__(self, images):
+        return images.var()
