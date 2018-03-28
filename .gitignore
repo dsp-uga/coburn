@@ -99,3 +99,12 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# JetBrains IDE files
+.idea
+
+# local data
+/data
+
+# output files
+/output
