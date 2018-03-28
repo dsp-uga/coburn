@@ -33,7 +33,7 @@ def main():
     cmd.set_defaults(func=download_movies)
 
     cmd = subcommands.add_parser('example', description='Load a small dataset and display the mean images', argument_default=argparse.SUPPRESS)
-    cmd.set_defaults(func=coburn.experiments.example_transform.main)
+    cmd.set_defaults(func=coburn.experiments.example_compose_transforms.main)
 
     # Each subcommand gives an `args.func`.
     # Call that function and pass the rest of `args` as kwargs.
