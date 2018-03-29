@@ -11,16 +11,18 @@ class Mean(Transform):
     """
     Computes the mean of a series of images along the time axis
     """
+
     def __call__(self, images):
-        return images.mean()
+        return images.mean().values[0]
 
 
 class Variance(Transform):
     """
     Computes the variance of a series of images along the time axis
     """
+
     def __call__(self, images):
-        return images.var()
+        return images.var().values[0]
 
 
 class Gaussian(Transform):
@@ -28,9 +30,12 @@ class Gaussian(Transform):
     Computes the gaussian smoothing of images along the time axis
     """
 
-    def __call__(self, series):
-        images=series.toimages()
-        return images.gaussian_filter(sigma=2,order=0).values[0];
+    def __init__(self, sigma, size):
+        self.size = size;
+        self.sigma = sigma
+
+    def __call__(self, images):
+        return images.gaussian_filter(sigma=self.sigma, order=self.size).values[0];
 
 
 class Median(Transform):
@@ -38,19 +43,19 @@ class Median(Transform):
     Computes the median filter of smoothing the images along the time axis
     """
 
-    def __call__(self, series):
-        images = series.toimages()
-        return images.median_filter(size=2).values[0];
+    def __init__(self, size):
+        self.size = size;
+
+    def __call__(self, images):
+        return images.median_filter(size=self.size).values[0];
 
 
 class Deviation(Transform):
-
     """
     Computes the standard deviation of images along the time axis
     """
 
-    def __call__(self, series):
-        images = series.toimages()
+    def __call__(self, images):
         return images.std().values[0];
 
 
@@ -59,10 +64,13 @@ class Subtract(Transform):
     This will subtract given value from all the images
 
     """
-    def __call__(self, series):
-        images = series.toimages()
 
-        return images.subtract(2).values[0];
+    def __init__(self, size):
+        self.size = size;
+
+    def __call__(self, images):
+        return images.subtract(val=self.size).values[0];
+
 
 class UniformFilter(Transform):
     """
@@ -70,6 +78,8 @@ class UniformFilter(Transform):
 
     """
 
-    def __call__(self, series):
-        images = series.toimages()
-        return images.uniform_filter(2).values[0];
+    def __init__(self, size):
+        self.size = size;
+
+    def __call__(self, images):
+        return images.uniform_filter(size=self.size).values[0];
