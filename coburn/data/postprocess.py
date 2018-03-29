@@ -50,7 +50,8 @@ def make_tar(input_dir, output_dir=None, pattern='*.png', filename='submission.t
     output_file = os.path.join(output_dir, filename)
     tar = tarfile.open(output_file, 'w')
     for filename in glob.glob(file_pattern):
-        tar.add(filename)
+        base_name = os.path.basename(filename)  # file name without the directory prefix
+        tar.add(filename, arcname=base_name)
     tar.close()
 
     return output_file
