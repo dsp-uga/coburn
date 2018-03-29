@@ -13,7 +13,7 @@ class Mean(Transform):
     """
 
     def __call__(self, images):
-        return images.mean().values[0]
+        return images.mean()
 
 
 class Variance(Transform):
@@ -22,7 +22,7 @@ class Variance(Transform):
     """
 
     def __call__(self, images):
-        return images.var().values[0]
+        return images.var()
 
 
 class Gaussian(Transform):
@@ -35,7 +35,7 @@ class Gaussian(Transform):
         self.sigma = sigma
 
     def __call__(self, images):
-        return images.gaussian_filter(sigma=self.sigma, order=self.size).values[0];
+        return images.gaussian_filter(sigma=self.sigma, order=self.size);
 
 
 class Median(Transform):
@@ -47,7 +47,7 @@ class Median(Transform):
         self.size = size;
 
     def __call__(self, images):
-        return images.median_filter(size=self.size).values[0];
+        return images.median_filter(size=self.size);
 
 
 class Deviation(Transform):
@@ -56,7 +56,7 @@ class Deviation(Transform):
     """
 
     def __call__(self, images):
-        return images.std().values[0];
+        return images.std();
 
 
 class Subtract(Transform):
@@ -69,7 +69,7 @@ class Subtract(Transform):
         self.size = size;
 
     def __call__(self, images):
-        return images.subtract(val=self.size).values[0];
+        return images.subtract(val=self.size);
 
 
 class UniformFilter(Transform):
@@ -82,4 +82,4 @@ class UniformFilter(Transform):
         self.size = size;
 
     def __call__(self, images):
-        return images.uniform_filter(size=self.size).values[0];
+        return images.uniform_filter(size=self.size);
