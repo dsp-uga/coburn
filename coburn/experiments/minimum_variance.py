@@ -4,10 +4,8 @@ Optimal variance threshold is found using a random sampling of examples from the
 """
 
 from torchvision.transforms import Compose
-from showit import tile, image
-from matplotlib import pyplot as plt
 import numpy as np
-from coburn.data import preprocess, loader
+from coburn.data import preprocess, postprocess, loader
 
 
 # tunes the threshold hyperparameter using the training set
@@ -50,27 +48,30 @@ def tune():
     print("Variance: %0.4f" % np.var(optimal_scores))
 
 
-def main(input='./data', output='./results', threshold=9.05):
-    # preprocessing
-    # variance_transform = preprocess.Variance()
-    #
-    # transform = Compose([variance_transform])
-    #
-    # # load data
-    # print("Loading dataset...")
-    # dataset = loader.random_sample(10, base_dir=input, seed=1234)
-    # dataset.set_transform(transform)
-    # img = dataset[1].toarray()
-    # threshold_indices = img > threshold
-    # mask = np.zeros(img.shape)
-    # mask[threshold_indices] = 2
-    # ground_truth = dataset.get_mask(1)
-    #
-    # print(dataset.compute_score(1, mask))
-    #
-    # # dataset.compute_score(0, mask)
-    # tile([mask, ground_truth])
-    # plt.show()
-    tune()
+def main(input='./data', output='./results/min_var', threshold=9.05):
+    # load the test data
+    print("Loading Data...")
+    dataset = loader.load('test', base_dir=input)
 
+    # compute variance along the time axis
+    variance_transform = preprocess.Variance()
+    transform = Compose([variance_transform])
+    dataset.set_transform(transform)
 
+    # segment each image and write it to the results directory
+    print("Segmenting images...")
+    for idx in range(0, len(dataset)):
+        img = dataset[idx].toarray()
+        hash = dataset.get_hash(idx)
+
+        # create cilia mask based on grayscale variance thresholding
+        mask = np.zeros(img.shape)
+        thresholding = img >= threshold
+        mask[thresholding] = 2
+
+        postprocess.export_as_png(mask, output, hash)
+
+    tar_path = postprocess.make_tar(output)
+
+    print("Done!")
+    print("Results written to %s" % tar_path)

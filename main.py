@@ -43,8 +43,8 @@ def main():
     cmd.add_argument('--input', '-i', default="./data",
                      help='The directory where the dataset can be found.  It will be downloaded to this location if it'
                           'is not found. [DEFAULT: ./data]')
-    cmd.add_argument('--output', '-o', default="./results",
-                     help='The directory where the image masks will be saved. [DEFAULT: ./results]')
+    cmd.add_argument('--output', '-o', default="./results/min_var",
+                     help='The directory where the image masks will be saved. [DEFAULT: ./results/min_var]')
     cmd.add_argument('--threshold', '-t', default=9.05,
                      help='Variance threshold.  Pixels with variance higher than this threshold will be marked as cilia. [DEFAULT: 1]')
     cmd.set_defaults(func=coburn.experiments.minimum_variance.main)
