@@ -62,10 +62,10 @@ If you see something that can be improved, please send us a pull request!
 
 ## Authors
 
+* [Vibodh Fenani](https://github.com/vibodh01)
 * [Layton Hayes](https://github.com/minimum-LaytonC)
 * [Zach Jones](https://github.com/zachdj)
 * [Raj Sivakumar](https://github.com/raj-sivakumar)
-* [Vibodh Fenani](https://github.com/vibodh01)
 
 See the [contributors file](CONTRIBUTORS.md) for more details.
 
