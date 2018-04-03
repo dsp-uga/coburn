@@ -49,6 +49,11 @@ def main():
                      help='Variance threshold.  Pixels with variance higher than this threshold will be marked as cilia. [DEFAULT: 1]')
     cmd.set_defaults(func=coburn.experiments.minimum_variance.main)
 
+    # segmentation using grayscale variance thresholding
+    cmd = subcommands.add_parser('fft_test',  argument_default=argparse.SUPPRESS,
+                                 description='Segment the testing set using a minimum variance threshold')
+    cmd.set_defaults(func=coburn.experiments.fft_hist_test.main)
+
     # Each subcommand gives an `args.func`.
     # Call that function and pass the rest of `args` as kwargs.
     args = parser.parse_args()

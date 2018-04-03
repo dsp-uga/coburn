@@ -82,8 +82,4 @@ class UniformFilter(Transform):
         self.size = size;
 
     def __call__(self, images):
-<<<<<<< HEAD
-        return images.var()
-=======
         return images.uniform_filter(size=self.size);
->>>>>>> vibodh/master

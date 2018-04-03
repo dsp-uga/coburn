@@ -6,6 +6,7 @@ from coburn.data import preprocess, loader, fft_features
 from torchvision.transforms import Compose
 from showit import tile
 from matplotlib import pyplot as plt
+import torch
 
 
 
@@ -18,12 +19,20 @@ def main():
     # compose the Mean and Variance transforms (this composition is rather meaningless, but is a good example of how this works)
     # note that order matters!  The transforms will be applied in order
     fft_transform = fft_features.Frequency()
+    # hist_transform = fft_features.Histogram()
+    tile(dataset[0])
+    plt.show()
+    print(size)
     composed_transform = Compose([fft_transform])
+    composed_transform
     dataset.set_transform(composed_transform)
 
     fft_images = list()
+
+    torch.Size(dataset)
     for i in range(len(dataset)):
         sample = dataset[i]  # mean transform has already been applied!
+        print(sample)
         fft_images.append(sample)
 
     tile(fft_images)
