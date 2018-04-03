@@ -28,8 +28,8 @@ def main():
     fft_images = list()
     print(length)
     for i in range(len(dataset)):
-        sample = dataset[i]  # fft transform has already been applied!
-        print(sample[0])
+        sample = dataset[i,:,:]  # mean transform has already been applied!
+        print(sample)
         fft_images.append(sample)
 
 
