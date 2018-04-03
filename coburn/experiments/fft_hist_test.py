@@ -23,7 +23,6 @@ def main():
     # hist_transform = fft_features.Histogram()
     tile(dataset[0])
     plt.show()
-    print(size)
     composed_transform = Compose([fft_transform])
     composed_transform.cuda()
     dataset.set_transform(composed_transform)
