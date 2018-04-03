@@ -1,7 +1,7 @@
 import torch.utils.data
 from torchvision.transforms import Compose
 import thunder as td
-import skimage.data
+import skimage.io
 import os
 from .Transform import Transform
 
@@ -71,7 +71,7 @@ class Dataset(torch.utils.data.Dataset):
         hash = self.get_hash(idx)
         mask_path = os.path.join(self.base_dir, hash, 'mask.png')
         if os.path.exists(mask_path):
-            return skimage.data.load(mask_path, as_grey=True)
+            return skimage.io.imread(mask_path, as_grey=True)
         else:
             return None
 
