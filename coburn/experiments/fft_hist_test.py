@@ -21,17 +21,15 @@ def main():
     fft_transform = fft_features.Frequency()
 
     # hist_transform = fft_features.Histogram()
-    tile(dataset[0])
-    plt.show()
     composed_transform = Compose([fft_transform])
-    composed_transform.cuda()
+    composed_transform
     dataset.set_transform(composed_transform)
 
     fft_images = list()
 
     torch.Size(dataset)
     for i in range(len(dataset)):
-        sample = dataset[i]  # mean transform has already been applied!
+        sample = dataset[i,:,:]  # mean transform has already been applied!
         print(sample)
         fft_images.append(sample)
 
