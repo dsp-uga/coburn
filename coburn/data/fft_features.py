@@ -1,5 +1,5 @@
 import numpy as np
-from . import Transform
+from .Transform import Transform
 
 class Frequency(Transform):
     def __call__(self, images):
