@@ -1,5 +1,6 @@
 import torch.utils.data
 from torchvision.transforms import Compose
+import numpy as np
 import thunder as td
 import skimage.io
 import os
@@ -74,6 +75,28 @@ class Dataset(torch.utils.data.Dataset):
             return skimage.io.imread(mask_path, as_grey=True)
         else:
             return None
+
+    def compute_score(self, idx, mask):
+        """
+        Compares the given mask with the ground truth image for dataset[idx] using the intersection-over-union score.
+        The caller must ensure that the given mask has the same dimensions as the ground-truth mask.
+
+        :param idx: the example in this dataset whose ground truth mask will be used
+        :param mask: the mask to compare against
+        :return: intersection-over-union score if ground truth is available for idx, 0 otherwise
+        """
+        ground_truth = self.get_mask(idx)
+        if ground_truth is None:
+            return 0
+        else:
+            assert(ground_truth.shape == mask.shape)
+            intersection = np.logical_and(mask == 2, ground_truth == 2)
+            intersection = np.count_nonzero(intersection)
+
+            union = np.logical_or(mask == 2, ground_truth == 2)
+            union = np.count_nonzero(union)
+
+            return intersection / union
 
     def set_transform(self, transform):
         """

@@ -21,3 +21,14 @@ class Variance(Transform):
     """
     def __call__(self, images):
         return images.var()
+
+
+class MedianFilter(Transform):
+    """
+    Applies a median filter with the specified kernel size to every image in the series
+    """
+    def __init__(self, size):
+        self.size = size or 2
+
+    def __call__(self, images):
+        return images.median_filter(size=self.size)
