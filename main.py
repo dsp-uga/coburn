@@ -32,8 +32,26 @@ def main():
                      help='the directory where the movie will be saved [DEFAULT: ./data]')
     cmd.set_defaults(func=download_movies)
 
-    cmd = subcommands.add_parser('example', description='Load a small dataset and display the mean images', argument_default=argparse.SUPPRESS)
+    # example script that does some preprocessing and shows the resultant images
+    cmd = subcommands.add_parser('example', argument_default=argparse.SUPPRESS,
+                                 description='Load a small dataset and display the mean images')
     cmd.set_defaults(func=coburn.experiments.example_compose_transforms.main)
+
+    # segmentation using grayscale variance thresholding
+    cmd = subcommands.add_parser('minimum-variance',  argument_default=argparse.SUPPRESS,
+                                 description='Segment the testing set using a minimum variance threshold')
+    cmd.add_argument('--input', '-i', default="./data",
+                     help='The directory where the dataset can be found.  It will be downloaded to this location if it'
+                          'is not found. [DEFAULT: ./data]')
+    cmd.add_argument('--output', '-o', default="./results/min_var",
+                     help='The directory where the image masks will be saved. [DEFAULT: ./results/min_var]')
+    cmd.add_argument('--threshold', '-t', default=8.75, type=float,
+                     help='Variance threshold.  Pixels with variance higher than this threshold will be marked as cilia'
+                          ' [DEFAULT: Use mean variance]')
+    cmd.add_argument('--filter_size', '-s', default=4, type=int,
+                     help='Size of the Median Filter to apply before thresholding.  0 if you do not want to apply a '
+                          'median filter [DEFAULT: 4]')
+    cmd.set_defaults(func=coburn.experiments.minimum_variance.main)
 
     # Each subcommand gives an `args.func`.
     # Call that function and pass the rest of `args` as kwargs.
