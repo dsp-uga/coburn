@@ -140,7 +140,7 @@ class Resize(Transform) :
 
             maskpath = os.path.join(self.baseDir, hash, 'mask.png')
             msk_png = imread(maskpath)
-            msk_png_resize = resize(msk_png, (self.shape1, self.shape2))
+            msk_png_resize = resize(msk_png, (self.width, self.height))
             resized_mask_path = os.path.join(resizedpath, 'mask.png')
             imsave(resized_mask_path, msk_png_resize)
 
@@ -153,7 +153,7 @@ class Resize(Transform) :
             for image in images:
                 img=os.path.join(imagepath,image)
                 org_img=imread(img)
-                resized_img=resize(org_img,(self.shape1,self.shape2))
+                resized_img=resize(org_img,(self.width,self.height))
                 resized_img_path=os.path.join(resizedpath,'images')
                 if not os.path.exists(resized_img_path):
                     os.makedirs(resized_img_path)
@@ -164,8 +164,11 @@ class Resize(Transform) :
 
 
                 imsave(resizedimagepath,resized_img)
-            np.save(os.path.join(resizedpath,hash+"-train-img.npy"),img_arr)
-            np.save(os.path.join(resizedpath, hash + "-trainmask.npy"), msk_arr)
+            outpath='content'
+            if not os.path.exists(outpath):
+                os.makedirs(outpath)
+            np.save(os.path.join(outpath,hash+"-train-img.npy"),img_arr)
+            np.save(os.path.join(outpath, hash + "-train-mask.npy"), msk_arr)
 
 
 class Padding(Transform):
