@@ -17,5 +17,8 @@ def main():
                                    '70a6300a00dbac92be9238252ee2a75c86faf4729f3ef267688ab859eed1cc60'])
 
     for i in range(len(dataset)):
-        dataset[i].toarray()
-        dataset[i].shape
+        sample = dataset[i] #thunder image series
+        dataset[i] = torch.from_numpy(sample.toarray()).cuda() #turn into cuda tensor
+        print(dataset[i].type())
+
+        print(dataset[i].shape)
