@@ -33,7 +33,7 @@ def main(input='./data', output='./results/fft_dom', k =10, dom_frequency=11):
         # create cilia mask based on grayscale variance thresholding
         mask = np.zeros(img.shape)
 
-        frequency_range = np.where(image_arr in [10,11,12] )
+        frequency_range = image_arr.any([10,11,12])
         for i in frequency_range:
             mask[frequency_range] = 2
 
