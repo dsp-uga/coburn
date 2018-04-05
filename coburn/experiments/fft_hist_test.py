@@ -31,5 +31,5 @@ def main():
 
     dataset.set_transform(transforms)
     for i in range(len(dataset)):
-        sample = dataset[i]
+        sample = dataset[i][0]
         print(sample)
