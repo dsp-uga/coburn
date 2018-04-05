@@ -7,3 +7,11 @@ import torchvision.transforms as tvt
 class MakeCUDA(Transform):
     def __call__(self, images):
         return torch.from_numpy(images.toarray()).float().cuda()
+
+class Frequency(Transform):
+    def __init__(self, n=128):
+        self.n = n
+    def __call__(self, images):
+        np_images = images.to_array()
+        sp = np.fft.fft(np_images, n=self.n, axis=0)
+        return sp.real
