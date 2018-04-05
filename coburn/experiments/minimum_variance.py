@@ -78,7 +78,8 @@ def main(input='./data', output='./results/min_var', threshold=None, filter_size
     # segment each image and write it to the results directory
     print("Segmenting images...")
     for idx in range(0, len(dataset)):
-        img = dataset[idx].toarray()
+        img, target = dataset[idx]
+        img = img.toarray()
         hash = dataset.get_hash(idx)
 
         # create cilia mask based on grayscale variance thresholding
