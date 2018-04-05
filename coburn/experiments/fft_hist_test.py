@@ -3,7 +3,7 @@ This experiment shows an example of how the loader and preprocess modules can be
 do some simple preprocessing
 """
 from coburn.data import preprocess, loader, fft_features
-from torchvision.transforms import Compose,
+from torchvision.transforms import Compose
 import torchvision.transforms as tvt
 import torch
 import numpy as np
