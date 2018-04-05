@@ -32,4 +32,4 @@ def main():
     dataset.set_transform(transforms)
     for i in range(len(dataset)):
         sample = dataset[i]
-        print(sample.shape)
+        print(sample)
