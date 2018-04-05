@@ -1,6 +1,5 @@
 """
-This experiment shows an example of how the loader and preprocess modules can be used to load a dataset and
-do some simple preprocessing (NEEDS cuda)
+This experiment is to load a dataset, generate frequency energy
 """
 from coburn.data import preprocess, loader, fft_features
 from torchvision.transforms import Compose
@@ -11,7 +10,7 @@ import numpy as np
 
 def main():
     # these samples will be automatically downloaded if they are not found locally
-    dataset = loader.load(samples='all')
+    dataset = loader.load(samples='test')
     resize_transform = preprocess.Resize(dataset, 640, 480)
     fft_transform = fft_features.Frequency(n=128)
     cuda_transform = tvt.Lambda(lambda x: torch.from_numpy(x).float().cuda())
@@ -27,5 +26,4 @@ def main():
                             flat_transform,
                             svd_transform,
                             reshape])
-    mask_transforms = Compose
     dataset.set_transform(transforms)
