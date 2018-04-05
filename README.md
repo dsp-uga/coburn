@@ -2,7 +2,7 @@
 
 Segmentation of cilia videos
 
-Coburn is a project that attempts to segment microscopic videos of human cells into regions of 
+Coburn is a project that attempts to segment microscopic videos of human cells into regions of
 cilia and non-cilia.  Coburn was completed over the course of three weeks in Spring 2018 as part of the "Data
 Science Practicum Class" at the University of Georgia.
 
@@ -35,12 +35,12 @@ To display program args and help, run
 
 `python main.py -h`
 
-Note that the datasets are automatically downloaded as required, so the 
+Note that the datasets are automatically downloaded as required, so the
 first time running experiments may be a little slow since the entire dataset will be downloaded.
 
 ### Minimum Variance Model
 
-The simplest model thresholds the input movies by their variance, marking a pixel as cilia if 
+The simplest model thresholds the input movies by their variance, marking a pixel as cilia if
 its variance exceeds some threshold value.  This experiment can be run as follows:
 
 
@@ -77,4 +77,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 * [Dr. Shannon Quinn](https://github.com/magsol) for providing the data set and project guidance
 * [U-Net](https://arxiv.org/abs/1505.04597) - Neural Net architecture used in this project for segmentation
-
