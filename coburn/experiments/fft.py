@@ -28,6 +28,7 @@ def main(input='./data', output='./results/fft_dom', k =10, dom_frequency=11):
     for i in range(0, len(dataset)):
         img, target = dataset[i]
         img_arr = img.cpu().numpy()
+        print(img_arr.shape)
         hash = dataset.get_hash(i)
 
         # create cilia mask based on grayscale variance thresholding
