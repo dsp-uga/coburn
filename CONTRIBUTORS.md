@@ -10,3 +10,5 @@ Zach Jones
     - Repository Management
 
 Raj Sivakumar
+    - Ciliary beat frequency pipeline
+    - FFT Features and transformations

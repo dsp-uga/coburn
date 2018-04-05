@@ -30,7 +30,7 @@ def main():
                             svd_transform,
                             reshape])
 
-    dataset = dataset.set_transform(transforms)
-    for i in range(0, len(dataset)):
+    dataset.set_transform(transforms)
+    for i in range(len(dataset)):
         sample = dataset[i]
         print(sample.shape)
