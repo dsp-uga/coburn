@@ -22,7 +22,6 @@ def main():
 
     transforms = Compose([resize_transform, cuda_transform, fft_transform, submean_tranform])
     dataset.set_transform(transforms)
-    mean_dataset = dataset.set_transform(mean_transform)
     for i in range(len(dataset)):
         print(dataset[i].type())
         print(dataset[i].shape)
