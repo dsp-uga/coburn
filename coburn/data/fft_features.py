@@ -15,3 +15,9 @@ class Frequency(Transform):
         np_images = images.toarray()
         sp = np.fft.fft(np_images, n=self.n, axis=0)
         return sp.real
+
+def PCA(data, k=2):
+    # adapted from web sources
+    # svd
+    U,S,V = torch.svd(torch.t(X))
+    return torch.mm(X,U[:,:k])
