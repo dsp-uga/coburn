@@ -35,7 +35,7 @@ def PCA(data, k=2):
     torch.cuda.empty_cache()
     # s = torch.cuda.stream()
     # with torch.cuda.stream(s):
-    X = torch.t(data)
+    X = torch.t(data).cpu()
     U,S,V = torch.svd(X)
     out = torch.mm(X,U[:,:k])
     return out
