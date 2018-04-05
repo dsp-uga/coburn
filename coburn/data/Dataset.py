@@ -8,7 +8,7 @@ from .Transform import Transform
 
 
 class Dataset(torch.utils.data.Dataset):
-    def __init__(self, hashes, base_dir="data", transform=None):
+    def __init__(self, hashes, base_dir="data", transform=None, mask_transform=None):
         """
         The Dataset class represents a dataset composed of thunder.Series objects.
         Items in the dataset are automatically streamed from disk as they are requested
@@ -29,6 +29,9 @@ class Dataset(torch.utils.data.Dataset):
         if transform is not None:
             assert(isinstance(transform, Transform) or isinstance(transform, Compose))
         self.transform = transform
+        if mask_transform is not None:
+            assert(isinstance(mask_transform, Transform) or isinstance(mask_transform, Compose))
+        self.mask_transform = mask_transform
 
     def __len__(self):
         """
@@ -53,11 +56,15 @@ class Dataset(torch.utils.data.Dataset):
         hash = self.hashes[idx]
         path_to_images = os.path.join(self.base_dir, hash, 'images')
         data = td.images.frompng(path_to_images)
+        target = self.get_mask(idx)
 
         if self.transform is not None:
             data = self.transform.__call__(data)
 
-        return data
+        if self.mask_transform is not None:
+            target = self.mask_transform.__call__(target)
+
+        return data, target
 
     def get_hash(self, idx):
         assert(0 <= idx < self.__len__())
@@ -117,4 +124,13 @@ class Dataset(torch.utils.data.Dataset):
         """
         assert(isinstance(transform, Transform) or isinstance(transform, Compose))
         self.transform = transform
+
+    def set_mask_transform(self, transform):
+        """
+        Sets the transform that will be applied to target masks loaded from this dataset
+        :param transform: coburn.data.Transform object
+        :return: None
+        """
+        assert(isinstance(transform, Transform) or isinstance(transform, Compose))
+        self.mask_transform = transform
 
