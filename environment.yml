@@ -89,4 +89,5 @@ dependencies:
     - tifffile==0.14.0
     - torch==0.3.1.post2
     - showit
+    - keras==2.0.8
 
