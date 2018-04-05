@@ -19,5 +19,5 @@ class Frequency(Transform):
 def PCA(data, k=2):
     # adapted from web sources
     # svd
-    U,S,V = torch.svd(torch.t(X))
-    return torch.mm(X,U[:,:k])
+    U,S,V = torch.svd(torch.t(data))
+    return torch.mm(data,U[:,:k])
