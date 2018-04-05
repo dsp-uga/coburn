@@ -58,6 +58,9 @@ def main():
                                  description='Segment the testing set using a minimum variance threshold')
     cmd.set_defaults(func=coburn.experiments.fft_hist_test.main)
 
+    cmd = subcommands.add_parser('max',  argument_default=argparse.SUPPRESS,
+                                 description='Segment the testing set using a minimum variance threshold')
+    cmd.set_defaults(func=coburn.experiments.max_frame_dims.main)
     # Each subcommand gives an `args.func`.
     # Call that function and pass the rest of `args` as kwargs.
     args = parser.parse_args()

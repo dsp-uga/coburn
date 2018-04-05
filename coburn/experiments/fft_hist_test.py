@@ -3,10 +3,10 @@ This experiment shows an example of how the loader and preprocess modules can be
 do some simple preprocessing
 """
 from coburn.data import preprocess, loader, fft_features
-from torchvision.transforms import Compose
-from showit import tile
-from matplotlib import pyplot as plt
+from torchvision.transforms import Compose,
+import torchvision.transforms as tvt
 import torch
+import numpy as np
 
 
 
@@ -16,7 +16,9 @@ def main():
                                    'a7e37600a431fa6d6023514df87cfc8bb5ec028fb6346a10c2ececc563cc5423',
                                    '70a6300a00dbac92be9238252ee2a75c86faf4729f3ef267688ab859eed1cc60'])
     cuda_transform = fft_features.MakeCUDA()
-    transforms = Compose([cuda_transform])
+    fft_transform = tvt.Lambda(lambda x: np.fft.fft(x, n=128, axis=0))
+
+    transforms = Compose([cuda_transform, fft_transform])
     dataset.set_transform(transforms)
     for i in range(len(dataset)):
          #thunder image series
