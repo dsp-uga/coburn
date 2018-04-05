@@ -22,8 +22,5 @@ def main():
     transforms = Compose([resize_transform,
                             fft_transform,
                             cuda_transform,
-                            submean_tranform,
-                            flat_transform,
-                            svd_transform,
-                            reshape])
+                            submean_tranform])
     dataset.set_transform(transforms)
