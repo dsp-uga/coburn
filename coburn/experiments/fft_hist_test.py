@@ -7,7 +7,6 @@ from torchvision.transforms import Compose
 import torchvision.transforms as tvt
 import torch
 import numpy as np
-import pytorch_fft.fft as fft
 
 
 def main():
@@ -17,7 +16,7 @@ def main():
                                    '70a6300a00dbac92be9238252ee2a75c86faf4729f3ef267688ab859eed1cc60'])
     resize_transform = preprocess.Resize(dataset, 640, 480)
     cuda_transform = fft_features.MakeCUDA()
-    fft_transform = tvt.Lambda(lambda x: fft.fft2(x, n=128, axis=0)[0])
+    fft_transform = tvt.Lambda(lambda x: torch.stft(x, fft_size=128, axis=0))
     submean_tranform = tvt.Lambda(lambda x: x.sub(torch.mean(x, dim=0)))
 
     transforms = Compose([resize_transform, cuda_transform, fft_transform, submean_tranform])
