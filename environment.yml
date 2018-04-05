@@ -3,15 +3,17 @@ channels:
   - pytorch
   - defaults
 dependencies:
-  - numpy
-  - pandas
-  - python=3.6
+  - argparse
+  - matplotlib
+  - pytorch
   - scikit-image
   - scipy
-  - pytorch
   - torchvision
+
   - pip:
+    - bolt-python
+    - boto
     - thunder-python
+    - tifffile
     - torch
     - showit
-
