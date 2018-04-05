@@ -19,8 +19,5 @@ def main():
     cuda_transform = tvt.Lambda(lambda x: torch.from_numpy(x).float().cuda())
     submean_tranform = tvt.Lambda(lambda x: x.sub(torch.mean(x, dim=0)))
 
-    transforms = Compose([resize_transform, fft_transform, cuda_transform])
+    transforms = Compose([resize_transform, fft_transform, cuda_transform, submean_tranform])
     dataset.set_transform(transforms)
-    for i in range(len(dataset)):
-        # print(dataset[i].type())
-        print(dataset[i].shape)

@@ -17,4 +17,3 @@ dependencies:
     - tifffile
     - torch
     - showit
-    - pytorch-fft
