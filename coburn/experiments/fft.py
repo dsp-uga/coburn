@@ -31,10 +31,11 @@ def main(input='./data', output='./results/fft_dom', k =10, dom_frequency=11):
         hash = dataset.get_hash(i)
 
         # create cilia mask based on grayscale variance thresholding
-        mask = np.zeros(img.shape)
+        mask = np.zeros(img_arr.shape)
 
-        frequency_range = np.where(image_arr, image_arr.any([10,11,12]))
-        mask[frequency_range] = 2
+        mask[np.where(img_arr==10)] = 2
+        mask[np.where(img_arr==11)] = 2
+        mask[np.where(img_arr==12)] = 2
 
 
         postprocess.export_as_png(mask, output, hash)
