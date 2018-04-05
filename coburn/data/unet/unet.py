@@ -2,7 +2,10 @@ from keras.models import Model
 from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose, Dropout, BatchNormalization
 from keras.optimizers import Adam
 
-
+'''
+This model was taken into consideration from Proj 3 Team Canady which was developed by our team member Vibodh and his group
+UNET paper https://arxiv.org/pdf/1707.06314.pdf
+'''
 def unet():
     inputs = Input((256, 256, 1))
     conv1 = Conv2D(64, (3, 3), activation='relu', padding='same')(inputs)
