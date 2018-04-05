@@ -24,15 +24,15 @@ def main():
 
     transforms1 = Compose([resize_transform,
                             fft_transform])
-    torch.cuda.emptycache()
+    torch.cuda.empty_cache()
     dataset = dataset.set_transform(transform1)
-    torch.cuda.emptycache()
+    torch.cuda.empty_cache()
     dataset = dataset.set_transform(submean_transform)
-    torch.cuda.emptycache()
+    torch.cuda.empty_cache()
     dataset = dataset.set_transform(flat_transform)
-    torch.cuda.emptycache()
+    torch.cuda.empty_cache()
     dataset = dataset.set_transform(svd_transform)
-    torch.cuda.emptycache()
+    torch.cuda.empty_cache()
     dataset = dataset.set_transform(reshape)
 
     for i in range(0, len(dataset)):
