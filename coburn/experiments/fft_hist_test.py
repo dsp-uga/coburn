@@ -22,7 +22,7 @@ def main():
     svd_transform = tvt.Lambda(lambda x: fft_features.PCA(x, k=10))
     reshape = tvt.Lambda(lambda x: x.view(640, 480, -1))
 
-    transforms1 = Compose([resize_transform,
+    transform1 = Compose([resize_transform,
                             fft_transform])
     torch.cuda.empty_cache()
     dataset = dataset.set_transform(transform1)
