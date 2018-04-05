@@ -22,13 +22,12 @@ def main():
     svd_transform = tvt.Lambda(lambda x: fft_features.PCA(x, k=10))
     reshape = tvt.Lambda(lambda x: x.view(640, 480, -1))
 
-    transforms = Compose([resize_transform,
-                            fft_transform,
+    transforms = Compose([fft_transform,
                             cuda_transform,
                             submean_tranform])
 
     dataset.set_transform(transforms)
-    
+
     for i in range(len(dataset)):
         sample = dataset[i]
         print(sample)
