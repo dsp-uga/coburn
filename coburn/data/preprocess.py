@@ -92,25 +92,25 @@ class Resize(Transform) :
     """
     This will resize the images and masks to the desired value
     Method :- init
-    @:param dataset :- takes in a dataset object which can be used to get image details
     @:param width,height :- New dimesions of image to resize
     @:param resize :- a boolean value which lets you know if resize is required
-    @:param baseDir :- path to access data
 
     Method :- store_resized_images
              This method basically loads all the images and masks for each hash resizes them
              and stores the results in new folder
+    @:param dataset :- takes in a dataset object which can be used to get image details
+    @:param baseDir :- path to access data
+
+
 
 
     """
 
-    def __init__(self, dataset,width,height,baseDir='data/'):
+    def __init__(self, width,height):
 
         self.width=width
         self.height=height
-        self.dataset=dataset
-        self.resize=resize
-        self.baseDir=baseDir
+
 
     def __call__(self, images):
 
@@ -128,7 +128,9 @@ class Resize(Transform) :
 
         return images
 
-    def store_resized_images(self):
+    def store_resized_images(self,dataset,baseDir='data/'):
+        self.dataset=dataset
+        self.baseDir=baseDir
         for i in range(len(self.dataset)):
             hash=self.dataset.get_hash(i)
             imagepath=os.path.join(self.baseDir,hash,'images')
