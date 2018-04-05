@@ -15,11 +15,12 @@ def main():
                                    'a7e37600a431fa6d6023514df87cfc8bb5ec028fb6346a10c2ececc563cc5423',
                                    '70a6300a00dbac92be9238252ee2a75c86faf4729f3ef267688ab859eed1cc60'])
     resize_transform = preprocess.Resize(dataset, 640, 480)
-    cuda_transform = fft_features.MakeCUDA()
-    fft_transform = tvt.Lambda(lambda x: torch.stft(x, fft_size=128, axis=0))
+    array_transform = preprocess.ToArray()
+    fft_transform = tvt.Lambda(lambda x: np.fft.fft(x, n=128, axis=0))
+    cuda_transform = tvt.Lambda(lambda x: torch.from_numpy(x).float().cuda())
     submean_tranform = tvt.Lambda(lambda x: x.sub(torch.mean(x, dim=0)))
 
-    transforms = Compose([resize_transform, cuda_transform, fft_transform, submean_tranform])
+    transforms = Compose([resize_transform, array_transform, fft_transform, submean_tranform])
     dataset.set_transform(transforms)
     for i in range(len(dataset)):
         print(dataset[i].type())
