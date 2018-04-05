@@ -12,6 +12,6 @@ class Frequency(Transform):
     def __init__(self, n=128):
         self.n = n
     def __call__(self, images):
-        np_images = images.to_array()
+        np_images = images.toarray()
         sp = np.fft.fft(np_images, n=self.n, axis=0)
         return sp.real
