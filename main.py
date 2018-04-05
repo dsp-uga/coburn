@@ -66,10 +66,12 @@ def main():
                           'is not found. [DEFAULT: ./data]')
     cmd.add_argument('--output', '-o', default="./results/min_var",
                      help='The directory where the image masks will be saved. [DEFAULT: ./results/min_var]')
-    cmd.add_argument('--num_dims', '-k', default=10, type=int,
+    cmd.add_argument('--k', '-k', default=10, type=int,
                      help='Number of dimensions to retain in dimensionality reduction step'
                           ' [DEFAULT: Use 10]')
-
+    cmd.add_argument('--dom_frequency', '-d', default=11, type=float,
+                     help='Frequency threshold.  Pixels with variance higher than this threshold will be marked as cilia'
+                          ' [DEFAULT: Use mean variance]')
     cmd.set_defaults(func=coburn.experiments.fft.main)
     # Each subcommand gives an `args.func`.
     # Call that function and pass the rest of `args` as kwargs.

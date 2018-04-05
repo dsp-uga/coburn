@@ -30,7 +30,7 @@ def PCA(data, k=2):
         data: 2D input
         k: number of principle components to extract
     """
-    # adapted from web sources
+    # adapted from web sources : http://agnesmustar.com/2017/11/01/principal-component-analysis-pca-implemented-pytorch/
     # svd
     torch.cuda.empty_cache()
     s = torch.cuda.stream()
