@@ -23,5 +23,4 @@ def main():
     for i in range(len(dataset)):
          #thunder image series
         print(dataset[i].type())
-
         print(dataset[i].shape)
