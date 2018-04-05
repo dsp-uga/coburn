@@ -63,6 +63,17 @@ class Dataset(torch.utils.data.Dataset):
         assert(0 <= idx < self.__len__())
         return self.hashes[idx]
 
+    def get_original_size(self, idx):
+        """
+        Gets the original size of the images in the movie at the specified index
+        :param idx: int, the index of the movie in this dataset whose original size you want to retrieve
+        :return: a tuple (W, H) specifying the original size of the images
+        """
+        hash = self.hashes[idx]
+        path_to_images = os.path.join(self.base_dir, hash, 'images')
+        data = td.images.frompng(path_to_images).toarray()
+        return data[0].shape
+
     def get_mask(self, idx):
         """
         Gets the ground-truth mask for the data point at the specified index
