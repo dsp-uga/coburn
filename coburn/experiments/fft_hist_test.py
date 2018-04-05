@@ -23,5 +23,5 @@ def main():
     transforms = Compose([resize_transform, array_transform, fft_transform])
     dataset.set_transform(transforms)
     for i in range(len(dataset)):
-        print(dataset[i].type())
+        # print(dataset[i].type())
         print(dataset[i].shape)
