@@ -64,7 +64,7 @@ def main():
     cmd.add_argument('--input', '-i', default="./data",
                      help='The directory where the dataset can be found.  It will be downloaded to this location if it'
                           'is not found. [DEFAULT: ./data]')
-    cmd.add_argument('--output', '-o', default="./results/min_var",
+    cmd.add_argument('--output', '-o', default="./results/fft_dom",
                      help='The directory where the image masks will be saved. [DEFAULT: ./results/min_var]')
     cmd.add_argument('--k', '-k', default=10, type=int,
                      help='Number of dimensions to retain in dimensionality reduction step'

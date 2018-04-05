@@ -22,7 +22,8 @@ def main(input='./data', output='./results/fft_dom', k =10, dom_frequency=11):
 
     transforms = Compose([fft_transform,
                             cuda_transform,
-                            submean_tranform])
+                            submean_tranform,
+                            ])
     dataset.set_transform(transforms)
 
     for i in range(0, len(dataset)):
