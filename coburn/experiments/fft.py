@@ -27,5 +27,5 @@ def main():
                             flat_transform,
                             svd_transform,
                             reshape])
-
+    mask_transforms = Compose
     dataset.set_transform(transforms)

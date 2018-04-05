@@ -22,18 +22,15 @@ def main():
     svd_transform = tvt.Lambda(lambda x: fft_features.PCA(x, k=10))
     reshape = tvt.Lambda(lambda x: x.view(640, 480, -1))
 
-    transform1 = Compose([resize_transform,
-                            fft_transform])
-    torch.cuda.empty_cache()
-    dataset = dataset.set_transform(transform1)
-    torch.cuda.empty_cache()
-    dataset = dataset.set_transform(submean_transform)
-    torch.cuda.empty_cache()
-    dataset = dataset.set_transform(flat_transform)
-    torch.cuda.empty_cache()
-    dataset = dataset.set_transform(svd_transform)
-    torch.cuda.empty_cache()
-    dataset = dataset.set_transform(reshape)
+    transforms = Compose([resize_transform,
+                            fft_transform,
+                            cuda_transform,
+                            submean_tranform,
+                            flat_transform,
+                            svd_transform,
+                            reshape])
 
+    dataset = dataset.set_transform(transforms)
     for i in range(0, len(dataset)):
-        print(dataset[i].shape)
+        sample = dataset[i]
+        print(sample.shape)
