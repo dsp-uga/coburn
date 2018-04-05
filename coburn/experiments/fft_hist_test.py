@@ -27,7 +27,6 @@ def main():
                             cuda_transform,
                             submean_tranform,
                             flat_transform,
-                            svd_transform,
                             reshape])
 
     dataset.set_transform(transforms)
