@@ -18,3 +18,4 @@ dependencies:
     - torch
     - showit
     - keras==2.0.8
+    - git+https://github.com/baldassarreFe/pytorch-densenet-tiramisu
