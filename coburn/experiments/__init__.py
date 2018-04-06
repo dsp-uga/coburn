@@ -1,5 +1,6 @@
 from . import example_transform
 from . import minimum_variance
+from . import tiramisu
 from . import example_compose_transforms
 from . import optical_flow
 from . import fft_hist_test
