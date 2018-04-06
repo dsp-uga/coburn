@@ -89,6 +89,8 @@ def main():
                      help='Frequency threshold.  Pixels with variance higher than this threshold will be marked as cilia'
                           ' [DEFAULT: Use mean variance]')
     cmd.set_defaults(func=coburn.experiments.fft.main)
+
+    
     # Tiramisu deep convolutional network
     cmd = subcommands.add_parser('tiramisu',  argument_default=argparse.SUPPRESS,
                                  description='Segment the testing set using the Tiramisu deep ConvNet architecture')
