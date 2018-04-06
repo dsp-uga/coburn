@@ -51,9 +51,9 @@ def train(input, epochs=200, learning_rate=1e-4):
     net = FCDenseNet103(in_channels=1, out_channels=3).cuda()
 
     # train the network
-    LR = 1e-4  # learning rate
-    N_EPOCHS = 2  # number of epochs to train
-    BATCH_SIZE = 2
+    LR = learning_rate
+    N_EPOCHS = epochs  # maximum number of epochs to train
+    BATCH_SIZE = 3
     torch.cuda.manual_seed(0)
     optimizer = optim.SGD(net.parameters(), lr=LR)
     criterion = nn.NLLLoss2d().cuda()
@@ -70,16 +70,54 @@ def train(input, epochs=200, learning_rate=1e-4):
             loss.backward()  # backpropagate
             optimizer.step()  # update weights
 
+        print("Epoch %d Finished" % epoch)
+        # save the trained network
+        torch.save(net, 'networks/tiramisu.torchnet')
+    print("Done training!")
 
-def test():
-    pass
+
+def test(input, output):
+    # loading the testing data
+    dataset = loader.load('test', base_dir=input)
+    dataset.set_transform(data_transform)
+
+    # load the network
+    net = torch.load('networks/tiramisu.torchnet')
+
+    for idx in range(0, len(dataset)):
+        image, mask = dataset[idx]  # mask will be None
+        image = Variable(image.unsqueeze(0).cuda())
+        net_out = net(image).data.cpu()
+        output_arr = net_out.numpy()[0]
+
+        # the output is a 3 x SIZE x SIZE array that gives confidence values for each class in the three channels
+        # we need to change these into a segmentation map
+        segmap = np.empty((SIZE, SIZE))
+        for row in range(0, SIZE):
+            for col in range(0, SIZE):
+                vals = output_arr[:, row, col]
+                index = np.argmax(vals)
+                segmap[row, col] = index
+
+        original_size = dataset.get_original_size(idx)
+        orig_size_transform = preprocess.ResizeMask(original_size[0], original_size[1])
+        segmap = orig_size_transform.__call__(segmap)
+
+        hash = dataset.get_hash(idx)
+        postprocess.export_as_png(segmap, output, hash)
+
+    tar_path = postprocess.make_tar(output)
+
+    print("Done!")
+    print("Results written to %s" % tar_path)
 
 
-def main(input='./data', output='./results/tiramisu', mode='both'):
+def main(input='./data', output='./results/tiramisu', mode='both', epochs=200, learning_rate=1e-4):
     """
     The `dense` package from baldassarreFe provides us with a canned implementation of Tiramisu.
     `in_channels` specify the number of channels in the input image.  `out_channels` specifies the number of classes
     """
-    # net = FCDenseNet103(in_channels=1, out_channels=3)
-    # print("Tiramisu!")
-    train(input)
+    if mode == 'train' or mode == 'both':
+        train(input, epochs=epochs, learning_rate=learning_rate)
+    if mode == 'test' or mode == 'both':
+        test(input, output)
