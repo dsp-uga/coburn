@@ -89,6 +89,25 @@ def main():
                      help='Frequency threshold.  Pixels with variance higher than this threshold will be marked as cilia'
                           ' [DEFAULT: Use mean variance]')
     cmd.set_defaults(func=coburn.experiments.fft.main)
+
+    
+    # Tiramisu deep convolutional network
+    cmd = subcommands.add_parser('tiramisu',  argument_default=argparse.SUPPRESS,
+                                 description='Segment the testing set using the Tiramisu deep ConvNet architecture')
+    cmd.add_argument('mode', default='both', choices=['train', 'test', 'both'],
+                     help='Train the network on the training split or segment the test set using the trained weights.'
+                          '\'both\' will train the network, then do segmentation on the test set [DEFAULT: both')
+    cmd.add_argument('--input', '-i', default="./data",
+                     help='The directory where the dataset can be found.  It will be downloaded to this location if it'
+                          'is not found. [DEFAULT: ./data]')
+    cmd.add_argument('--output', '-o', default="./results/tiramisu",
+                     help='The directory where the image masks will be saved. [DEFAULT: ./results/tiramisu]')
+    cmd.add_argument('--epochs', '-e', default=200, type=int,
+                     help='Number of epochs to train (if training). [DEFAULT: 200]')
+    cmd.add_argument('--learning_rate', '-l', default=0.0001, type=float,
+                     help='Learning rate to use (if training). [DEFAULT: 0.0001]')
+    cmd.set_defaults(func=coburn.experiments.tiramisu.main)
+
     # Each subcommand gives an `args.func`.
     # Call that function and pass the rest of `args` as kwargs.
     args = parser.parse_args()
