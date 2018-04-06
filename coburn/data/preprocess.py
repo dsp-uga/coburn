@@ -8,6 +8,7 @@ from skimage.transform import resize as sk_resize
 import thunder as td
 import numpy as np
 from .Transform import Transform
+import cv2
 import os;
 from skimage.transform import resize
 from skimage.io import imshow,imread,imsave
@@ -108,6 +109,25 @@ class MedianFilter(Transform):
     def __call__(self, images):
         return images.median_filter(size=self.size)
 
+
+class OpticalFlow(Transform):
+    """
+    Computes optical flow between each sequential pair of images.
+    return shape has an extra dimension of size 2, and the first dimension is
+    of size one less (e.g. 100 becomes 99, i.e. shape[0]-=1).
+    """
+    def __call__(self, images):
+        images = np.array(images)
+        flows = np.empty((0, images.shape[1], images.shape[2], 2))
+        i = 0
+        while(i < images.shape[0]-1):
+            flow = cv2.calcOpticalFlowFarneback(
+                images[i], images[i+1], None, 0.5, 3, 15, 3, 5, 1.2, 0)
+            flows = np.append(flows, [flow], axis=0)
+            i += 1
+        return td.images.images.Images(flows)
+
+      
 class Resize(Transform) :
 
     """
