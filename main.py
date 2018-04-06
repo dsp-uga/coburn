@@ -53,6 +53,22 @@ def main():
                           'median filter [DEFAULT: 4]')
     cmd.set_defaults(func=coburn.experiments.minimum_variance.main)
 
+    # segmentation using optical flow magnitude thresholding
+    cmd = subcommands.add_parser('optical-flow',  argument_default=argparse.SUPPRESS,
+                                 description='Segment the testing set using a optical flow variance threshold')
+    cmd.add_argument('--input', '-i', default="./data",
+                     help='The directory where the dataset can be found.  It will be downloaded to this location if it'
+                          'is not found. [DEFAULT: ./data]')
+    cmd.add_argument('--output', '-o', default="./results/min_var",
+                     help='The directory where the image masks will be saved. [DEFAULT: ./results/min_var]')
+    cmd.add_argument('--threshold', '-t', default=0.05, type=float,
+                     help='Optical flow variance threshold.  Pixels with variance higher than this threshold will be marked as cilia'
+                          ' [DEFAULT: Use mean magnitude]')
+    cmd.add_argument('--filter_size', '-s', default=4, type=int,
+                     help='Size of the Median Filter to apply before thresholding.  0 if you do not want to apply a '
+                          'median filter [DEFAULT: 4]')
+    cmd.set_defaults(func=coburn.experiments.optical_flow.main)
+
     # segmentation using grayscale variance thresholding
     cmd = subcommands.add_parser('fft_test',  argument_default=argparse.SUPPRESS,
                                  description='Segment the testing set using a minimum variance threshold')

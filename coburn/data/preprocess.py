@@ -9,11 +9,9 @@ import thunder as td
 import numpy as np
 from .Transform import Transform
 import cv2
-import os;
+import os
 from skimage.transform import resize
 from skimage.io import imshow,imread,imsave
-import numpy as np
-import thunder as td
 
 
 class UniformResize(Transform):
@@ -116,6 +114,7 @@ class OpticalFlow(Transform):
     return shape has an extra dimension of size 2, and the first dimension is
     of size one less (e.g. 100 becomes 99, i.e. shape[0]-=1).
     """
+
     def __call__(self, images):
         images = np.array(images)
         flows = np.empty((0, images.shape[1], images.shape[2], 2))
@@ -127,8 +126,21 @@ class OpticalFlow(Transform):
             i += 1
         return td.images.images.Images(flows)
 
-      
-class Resize(Transform) :
+
+class Magnitude(Transform):
+    """
+    Computes the l2 norms of each image pixelwise across multiple channels.
+    Squashes and eliminates the channel dimension,
+    useful for example in thresholding based on optical flow
+    """
+
+    def __call__(self, images):
+        images = images.toarray()
+        l2_norms = np.linalg.norm(images, ord=2, axis=3)
+        return td.images.images.Images(l2_norms)
+
+
+class Resize(Transform):
 
     """
     This will resize the images and masks to the desired value
@@ -141,17 +153,12 @@ class Resize(Transform) :
              and stores the results in new folder
     @:param dataset :- takes in a dataset object which can be used to get image details
     @:param baseDir :- path to access data
-
-
-
-
     """
 
     def __init__(self, width,height):
 
         self.width=width
         self.height=height
-
 
     def __call__(self, images):
 
@@ -176,10 +183,8 @@ class Resize(Transform) :
             hash=self.dataset.get_hash(i)
             imagepath=os.path.join(self.baseDir,hash,'images')
 
-
             resizedpath = os.path.join(self.baseDir,hash, 'resized')
             msk_arr = []
-
 
             maskpath = os.path.join(self.baseDir, hash, 'mask.png')
             msk_png = imread(maskpath)
@@ -203,8 +208,6 @@ class Resize(Transform) :
                 resizedimagepath=os.path.join(resized_img_path,image)
                 img_arr.append(resized_img)
                 msk_arr.append(msk_png_resize)
-
-
 
                 imsave(resizedimagepath,resized_img)
             outpath='content'
@@ -234,12 +237,14 @@ class Padding(Transform):
             resArr.append(padded_img)
         images=td.images.fromarray(resArr)
         return images
-        
+
+
 class ToArray(Transform):
     """
     Converts a thunder.Images object to a numpy ndarray with dimensions [H x W x T]
     where H is the height, W is the width, and T is the time or number of channels
     """
+
     def __call__(self, images):
         # handle the special case when the array is 2D:
         images = images.toarray()
@@ -256,6 +261,7 @@ class MaskToSegMap(Transform):
     A segmentation map will be m x n x 3.
     segmap[row, col, i] will be 1 if the mask has class i at location (row, col)
     """
+
     def __call__(self, mask):
         shape = mask.shape
         segmap = np.empty((shape[0], shape[1], 3))
@@ -270,6 +276,7 @@ class ResizeMask(Transform):
     """
     Resizes a PNG mask to be the specified size
     """
+
     def __init__(self, width, height):
         self.width = width
         self.height = height
