@@ -17,3 +17,4 @@ dependencies:
     - tifffile
     - torch
     - showit
+    - keras==2.0.8
