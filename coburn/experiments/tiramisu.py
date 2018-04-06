@@ -17,33 +17,31 @@ import torchvision.transforms
 from torch.autograd import Variable
 from torch.utils.data import dataloader
 from dense import FCDenseNet103
-from coburn.data import loader, preprocess
+from coburn.data import loader, preprocess, postprocess
+
+SIZE = 256  # images will be resized to SIZE x SIZE before being fed into the network
+# create tranform for input data
+transforms = []
+resize_transform = preprocess.UniformResize(SIZE, SIZE)
+transforms.append(resize_transform)
+
+# convert the time series into an image with one channel
+variance_transform = preprocess.Variance()
+transforms.append(variance_transform)
+
+# convert the input to a torch Tensor
+transforms.append(preprocess.ToArray())
+transforms.append(torchvision.transforms.ToTensor())
+
+# compose the transforms
+data_transform = torchvision.transforms.Compose(transforms)
 
 
-def train(input):
+def train(input, epochs=200, learning_rate=1e-4):
     dataset = loader.load('train', base_dir=input)
-
-    SIZE = 128  # images will be resized to SIZE x SIZE before being fed into the network
-
-    transforms = []
-    # resize the images to be 512 x 512 each
-    resize_transform = preprocess.UniformResize(SIZE, SIZE)
-    transforms.append(resize_transform)
-
-    # convert the time series into an image with one channel
-    variance_transform = preprocess.Variance()
-    transforms.append(variance_transform)
-
-    # convert the input to a torch Tensor
-    transforms.append(preprocess.ToArray())
-    transforms.append(torchvision.transforms.ToTensor())
-
-    # compose the transforms
-    transform = torchvision.transforms.Compose(transforms)
-    dataset.set_transform(transform)
+    dataset.set_transform(data_transform)
 
     # create a transform that preprocesses the target masks
-    # mask_transform = torchvision.transforms.Compose([preprocess.MaskToSegMap(), preprocess.ResizeMask(SIZE, SIZE), torchvision.transforms.ToTensor()])
     mask_transform = torchvision.transforms.Compose([preprocess.ResizeMask(SIZE, SIZE)])
     dataset.set_mask_transform(mask_transform)
 
