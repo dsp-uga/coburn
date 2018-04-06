@@ -107,6 +107,19 @@ class OpticalFlow(Transform):
         return td.images.images.Images(flows)
 
 
+class Magnitude(Transform):
+    """
+    Computes the l2 norms of each image pixelwise across multiple channels.
+    Squashes and eliminates the channel dimension,
+    useful for example in thresholding based on optical flow
+    """
+
+    def __call__(self, images):
+        images = images.toarray()
+        l2_norms = np.linalg.norm(images, ord=2, axis=3)
+        return td.images.images.Images(l2_norms)
+
+
 class Resize(Transform):
 
     """
