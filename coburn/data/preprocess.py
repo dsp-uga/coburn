@@ -4,12 +4,35 @@ Each transform class should extend coburn.data.Transform.
 Transforms can be composed together using torchvision.transforms.Compose
 """
 
+from skimage.transform import resize as sk_resize
+import thunder as td
+import numpy as np
 from .Transform import Transform
+import cv2
 import os;
 from skimage.transform import resize
 from skimage.io import imshow,imread,imsave
 import numpy as np
 import thunder as td
+
+
+class UniformResize(Transform):
+    """
+    Resizes the series of images to be of uniform size
+    """
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def __call__(self, images):
+        images = images.toarray()
+        resized = np.zeros((len(images), self.height, self.width))
+        for idx in range(0, len(images)):
+            img = images[idx]
+            resized_img = sk_resize(img, (self.height, self.width))
+            resized[idx] = resized_img
+
+        return td.images.fromarray(resized)
 
 
 class Mean(Transform):
@@ -87,30 +110,48 @@ class MedianFilter(Transform):
         return images.median_filter(size=self.size)
 
 
+class OpticalFlow(Transform):
+    """
+    Computes optical flow between each sequential pair of images.
+    return shape has an extra dimension of size 2, and the first dimension is
+    of size one less (e.g. 100 becomes 99, i.e. shape[0]-=1).
+    """
+    def __call__(self, images):
+        images = np.array(images)
+        flows = np.empty((0, images.shape[1], images.shape[2], 2))
+        i = 0
+        while(i < images.shape[0]-1):
+            flow = cv2.calcOpticalFlowFarneback(
+                images[i], images[i+1], None, 0.5, 3, 15, 3, 5, 1.2, 0)
+            flows = np.append(flows, [flow], axis=0)
+            i += 1
+        return td.images.images.Images(flows)
+
+      
 class Resize(Transform) :
 
     """
     This will resize the images and masks to the desired value
     Method :- init
-    @:param dataset :- takes in a dataset object which can be used to get image details
     @:param width,height :- New dimesions of image to resize
     @:param resize :- a boolean value which lets you know if resize is required
-    @:param baseDir :- path to access data
 
     Method :- store_resized_images
              This method basically loads all the images and masks for each hash resizes them
              and stores the results in new folder
+    @:param dataset :- takes in a dataset object which can be used to get image details
+    @:param baseDir :- path to access data
+
+
 
 
     """
 
-    def __init__(self, dataset,width,height,baseDir='data/'):
+    def __init__(self, width,height):
 
         self.width=width
         self.height=height
-        self.dataset=dataset
-        self.resize=resize
-        self.baseDir=baseDir
+
 
     def __call__(self, images):
 
@@ -128,7 +169,9 @@ class Resize(Transform) :
 
         return images
 
-    def store_resized_images(self):
+    def store_resized_images(self,dataset,baseDir='data/'):
+        self.dataset=dataset
+        self.baseDir=baseDir
         for i in range(len(self.dataset)):
             hash=self.dataset.get_hash(i)
             imagepath=os.path.join(self.baseDir,hash,'images')
@@ -191,3 +234,45 @@ class Padding(Transform):
             resArr.append(padded_img)
         images=td.images.fromarray(resArr)
         return images
+        
+class ToArray(Transform):
+    """
+    Converts a thunder.Images object to a numpy ndarray with dimensions [H x W x T]
+    where H is the height, W is the width, and T is the time or number of channels
+    """
+    def __call__(self, images):
+        # handle the special case when the array is 2D:
+        images = images.toarray()
+        if len(images.shape) == 2:
+            images = images[:, :, np.newaxis]
+            return images
+
+        return images.swapaxes(0, 2).swapaxes(0, 1)  # move the non-spatial axis to the correct position
+
+
+class MaskToSegMap(Transform):
+    """
+    Converts an m x n PNG mask to a segmentation map.  Mask should be a numpy array with shape (m, n)
+    A segmentation map will be m x n x 3.
+    segmap[row, col, i] will be 1 if the mask has class i at location (row, col)
+    """
+    def __call__(self, mask):
+        shape = mask.shape
+        segmap = np.empty((shape[0], shape[1], 3))
+
+        segmap[mask == 2] = [0, 0, 1]
+        segmap[mask == 1] = [0, 1, 0]
+        segmap[mask == 0] = [1, 0, 0]
+        return segmap
+
+
+class ResizeMask(Transform):
+    """
+    Resizes a PNG mask to be the specified size
+    """
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def __call__(self, mask):
+        return sk_resize(mask, (self.height, self.width))
